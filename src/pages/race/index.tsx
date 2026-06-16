@@ -5,11 +5,21 @@ import SectionHeader from '@/components/SectionHeader';
 import RaceCard from '@/components/RaceCard';
 import StatusTag from '@/components/StatusTag';
 import { useAppStore } from '@/store';
-import { calcSpeed } from '@/utils';
+import { calcSpeed, calcDurationMinutes, formatDuration } from '@/utils';
 import type { Race, RaceResult, Pigeon } from '@/types';
 import styles from './index.module.scss';
 
 type TabKey = 'race' | 'release' | 'timing' | 'training' | 'result';
+
+const pad = (n: number) => String(n).padStart(2, '0');
+const todayStr = () => {
+  const d = new Date();
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+};
+const nowTimeStr = () => {
+  const d = new Date();
+  return `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+};
 
 const RacePage: React.FC = () => {
   const {
@@ -25,7 +35,9 @@ const RacePage: React.FC = () => {
   const [releaseRaceId, setReleaseRaceId] = useState('');
   const [timingRaceId, setTimingRaceId] = useState('');
   const [timingRing, setTimingRing] = useState('');
-  const [timingMinutes, setTimingMinutes] = useState('');
+  const [timingReturnDate, setTimingReturnDate] = useState(todayStr());
+  const [timingReturnTime, setTimingReturnTime] = useState(nowTimeStr());
+  const [resultRaceId, setResultRaceId] = useState('');
   const [now, setNow] = useState(new Date());
 
   useEffect(() => {
@@ -80,27 +92,28 @@ const RacePage: React.FC = () => {
       Taro.showToast({ title: '未找到该足环的赛鸽', icon: 'none' });
       return;
     }
-    if (!race.releaseTime) {
+    if (!race.releaseTime || !race.date) {
       Taro.showToast({ title: '比赛未记录放飞时间', icon: 'none' });
       return;
     }
-
-    let durationMin: number;
-    if (timingMinutes && parseInt(timingMinutes, 10) > 0) {
-      durationMin = parseInt(timingMinutes, 10);
-    } else {
-      const [rh, rm] = race.releaseTime.split(':').map((s) => parseInt(s, 10));
-      const releaseMinutes = rh * 60 + rm;
-      const curMinutes = now.getHours() * 60 + now.getMinutes();
-      durationMin = Math.max(1, curMinutes - releaseMinutes);
+    if (!timingReturnDate || !timingReturnTime) {
+      Taro.showToast({ title: '请填写归巢日期和时间', icon: 'none' });
+      return;
     }
 
+    const durationMin = calcDurationMinutes(
+      race.date,
+      race.releaseTime,
+      timingReturnDate,
+      timingReturnTime
+    );
     const speed = calcSpeed(race.distance, durationMin);
-    const durationStr = `${Math.floor(durationMin / 60)}小时${durationMin % 60}分`;
-    const returnStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+    const durationStr = formatDuration(durationMin);
+    const returnStr = `${timingReturnDate} ${timingReturnTime}`;
 
     const result: RaceResult = {
       rank: 0,
+      raceId: timingRaceId,
       pigeonId: pigeon.id,
       ringNumber: pigeon.ringNumber,
       ownerName: pigeon.ownerName,
@@ -116,7 +129,6 @@ const RacePage: React.FC = () => {
       icon: 'success'
     });
     setTimingRing('');
-    setTimingMinutes('');
   };
 
   const typeIcons: Record<string, { icon: string; className: string }> = {
@@ -134,6 +146,14 @@ const RacePage: React.FC = () => {
     [races]
   );
   const selectableRaces = [...ongoingRaces, ...upcomingRaces];
+  const racesWithResults = useMemo(
+    () => races.filter((r) => raceResults.some((rr) => rr.raceId === r.id)),
+    [races, raceResults]
+  );
+  const filteredResults = useMemo(() => {
+    if (!resultRaceId) return raceResults;
+    return raceResults.filter((r) => r.raceId === resultRaceId);
+  }, [raceResults, resultRaceId]);
 
   return (
     <ScrollView scrollY className={styles.page}>
@@ -319,18 +339,34 @@ const RacePage: React.FC = () => {
                 onInput={(e) => setTimingRing(e.detail.value)}
               />
             </View>
-            <View className={styles.formItem}>
-              <Text className={styles.formLabel}>飞行时长(分钟)（留空=按当前时间自动计算）</Text>
-              <Input
-                className={styles.formInput}
-                type="number"
-                placeholder="留空自动按放飞时间计算"
-                value={timingMinutes}
-                onInput={(e) => setTimingMinutes(e.detail.value)}
-              />
+            <View className={styles.formRow}>
+              <View className={`${styles.formItem} ${styles.formRowItem}`}>
+                <Text className={styles.formLabel}>
+                  <Text className={styles.required}>*</Text>
+                  归巢日期
+                </Text>
+                <Input
+                  className={styles.formInput}
+                  placeholder="YYYY-MM-DD"
+                  value={timingReturnDate}
+                  onInput={(e) => setTimingReturnDate(e.detail.value)}
+                />
+              </View>
+              <View className={`${styles.formItem} ${styles.formRowItem}`}>
+                <Text className={styles.formLabel}>
+                  <Text className={styles.required}>*</Text>
+                  归巢时间
+                </Text>
+                <Input
+                  className={styles.formInput}
+                  placeholder="HH:MM"
+                  value={timingReturnTime}
+                  onInput={(e) => setTimingReturnTime(e.detail.value)}
+                />
+              </View>
             </View>
             <View className={styles.formItem}>
-              <Text className={styles.formLabel}>当前时间</Text>
+              <Text className={styles.formLabel}>当前系统时间</Text>
               <View className={styles.timeBox}>
                 <Text className={styles.timeValue}>
                   {now.toLocaleTimeString('zh-CN', { hour12: false })}
@@ -396,17 +432,51 @@ const RacePage: React.FC = () => {
       {activeTab === 'result' && (
         <>
           <SectionHeader title="实时成绩排名" />
+          <View className={styles.formCard} style={{ marginBottom: 24 }}>
+            <View className={styles.formItem}>
+              <Text className={styles.formLabel}>选择比赛</Text>
+              <View
+                className={styles.selector}
+                onClick={() => {
+                  const items = ['全部比赛', ...racesWithResults.map((r) => r.name)];
+                  Taro.showActionSheet({
+                    itemList: items,
+                    success: (res) => {
+                      if (res.tapIndex === 0) {
+                        setResultRaceId('');
+                      } else {
+                        setResultRaceId(racesWithResults[res.tapIndex - 1].id);
+                      }
+                    }
+                  });
+                }}
+              >
+                <Text
+                  className={
+                    resultRaceId
+                      ? styles.selectorText
+                      : styles.selectorPlaceholder
+                  }
+                >
+                  {resultRaceId
+                    ? races.find((r) => r.id === resultRaceId)?.name
+                    : '全部比赛'}
+                </Text>
+                <Text style={{ color: '#86909C' }}>›</Text>
+              </View>
+            </View>
+          </View>
           <View className={styles.resultTable}>
             <View className={styles.tableHeader}>
               <View className={styles.colRank}>名次</View>
               <View className={styles.colPigeon}>赛鸽信息</View>
               <View className={styles.colSpeed}>分速</View>
             </View>
-            {raceResults.map((result) => {
+            {filteredResults.map((result) => {
               const rankClass = result.rank <= 3 ? `top${result.rank}` : 'normal';
               return (
                 <View
-                  key={`${result.ringNumber}-${result.rank}`}
+                  key={`${result.raceId}-${result.ringNumber}`}
                   className={styles.tableRow}
                   onClick={() => handleRowClick(result.pigeonId)}
                 >
@@ -435,7 +505,7 @@ const RacePage: React.FC = () => {
                 </View>
               );
             })}
-            {raceResults.length === 0 && (
+            {filteredResults.length === 0 && (
               <View className={styles.emptyBox}>
                 <Text className={styles.emptyText}>暂无成绩数据，比赛进行后自动生成</Text>
               </View>

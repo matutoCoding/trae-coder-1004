@@ -21,19 +21,19 @@ const SettlementPage: React.FC = () => {
   const { settlements, pigeons, raceResults, races } = useAppStore();
   const [activeTab, setActiveTab] = useState<'prize' | 'record'>('prize');
 
-  const totalIncome = useMemo(
+  const totalEntryFee = useMemo(
     () =>
       settlements
-        .filter((s) => s.type !== 'entryFee')
-        .reduce((sum, s) => sum + s.amount, 0),
+        .filter((s) => s.type === 'entryFee' && s.status === 'completed')
+        .reduce((sum, s) => sum + Math.abs(s.amount), 0),
     [settlements]
   );
 
-  const totalExpense = useMemo(
+  const totalPrizePaid = useMemo(
     () =>
       settlements
-        .filter((s) => s.type === 'entryFee')
-        .reduce((sum, s) => sum + s.amount, 0),
+        .filter((s) => s.type !== 'entryFee' && s.status === 'completed')
+        .reduce((sum, s) => sum + Math.abs(s.amount), 0),
     [settlements]
   );
 
@@ -65,7 +65,7 @@ const SettlementPage: React.FC = () => {
     [pigeons, finalRace]
   );
 
-  const netAmount = totalIncome - totalExpense;
+  const netAmount = totalEntryFee - totalPrizePaid;
   const paidCount = pigeons.filter((p) => p.paid).length;
   const unpaidCount = pigeons.length - paidCount;
 
@@ -78,12 +78,12 @@ const SettlementPage: React.FC = () => {
         </View>
         <View className={styles.summarySub}>
           <View className={styles.subItem}>
-            <Text className={styles.subValue}>{formatMoney(totalIncome)}</Text>
-            <Text className={styles.subLabel}>累计奖金</Text>
+            <Text className={styles.subValue}>{formatMoney(totalEntryFee)}</Text>
+            <Text className={styles.subLabel}>参赛费收入</Text>
           </View>
           <View className={styles.subItem}>
-            <Text className={styles.subValue}>{formatMoney(totalExpense)}</Text>
-            <Text className={styles.subLabel}>已缴费用</Text>
+            <Text className={styles.subValue}>{formatMoney(totalPrizePaid)}</Text>
+            <Text className={styles.subLabel}>奖金支出</Text>
           </View>
           <View className={styles.subItem}>
             <Text className={styles.subValue}>{paidCount}羽</Text>
@@ -157,7 +157,7 @@ const SettlementPage: React.FC = () => {
               <SectionHeader title="已出成绩分配" />
               <View className={styles.resultCard}>
                 {resultWithPrize.map((r) => (
-                  <View key={`${r.ringNumber}-${r.rank}`} className={styles.resultRow}>
+                  <View key={`${r.raceId}-${r.ringNumber}`} className={styles.resultRow}>
                     <View className={styles.resultRank}>
                       <Text className={styles.resultRankNum}>第{r.rank}名</Text>
                     </View>
@@ -192,7 +192,8 @@ const SettlementPage: React.FC = () => {
             </View>
           )}
           {settlements.map((item) => {
-            const isIncome = item.type !== 'entryFee';
+            const isIncome = item.type === 'entryFee';
+            const absAmount = Math.abs(item.amount);
             return (
               <View key={item.id} className={styles.recordItem}>
                 <View className={styles.recordHeader}>
@@ -212,7 +213,7 @@ const SettlementPage: React.FC = () => {
                   <Text
                     className={`${styles.recordAmount} ${isIncome ? styles.income : styles.expense}`}
                   >
-                    {isIncome ? '+' : '-'}{formatMoney(item.amount)}
+                    {isIncome ? '+' : '-'}{formatMoney(absAmount)}
                   </Text>
                 </View>
                 <View className={styles.recordMeta}>

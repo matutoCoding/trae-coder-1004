@@ -19,6 +19,30 @@ export const calcSpeed = (distance: number, durationMinutes: number): number => 
   return Number(((distance * 1000) / durationMinutes).toFixed(2));
 };
 
+export const calcDurationMinutes = (
+  raceDate: string,
+  releaseTime: string,
+  returnDate: string,
+  returnTime: string
+): number => {
+  const releaseStr = `${raceDate}T${releaseTime}:00`;
+  const returnStr = `${returnDate}T${returnTime}:00`;
+  const releaseTs = new Date(releaseStr).getTime();
+  const returnTs = new Date(returnStr).getTime();
+  if (isNaN(releaseTs) || isNaN(returnTs)) return 1;
+  const diffMin = Math.max(1, Math.round((returnTs - releaseTs) / 60000));
+  return diffMin;
+};
+
+export const formatDuration = (minutes: number): string => {
+  const h = Math.floor(minutes / 60);
+  const m = minutes % 60;
+  if (h > 0) {
+    return `${h}小时${m}分`;
+  }
+  return `${m}分钟`;
+};
+
 export const getStatusColor = (status: string): string => {
   const colorMap: Record<string, string> = {
     health: '#43A047',

@@ -27,6 +27,7 @@ export interface LoftArea {
   area: string;
   manager: string;
   status: 'normal' | 'full' | 'maintenance';
+  statusText: string;
 }
 
 export interface TrainingRecord {
@@ -61,6 +62,7 @@ export interface Race {
 
 export interface RaceResult {
   rank: number;
+  raceId: string;
   pigeonId: string;
   ringNumber: string;
   ownerName: string;

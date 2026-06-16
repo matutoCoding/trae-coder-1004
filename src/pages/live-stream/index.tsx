@@ -28,8 +28,11 @@ const LiveStreamPage: React.FC = () => {
   );
 
   const liveResults = useMemo(
-    () => [...raceResults].sort((a, b) => b.speed - a.speed),
-    [raceResults]
+    () =>
+      raceResults
+        .filter((r) => !activeRaceId || r.raceId === activeRaceId)
+        .sort((a, b) => b.speed - a.speed),
+    [raceResults, activeRaceId]
   );
 
   const latestResults = liveResults.slice(0, 8);

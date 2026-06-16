@@ -64,10 +64,12 @@ export const useAppStore = create<AppState>((set, get) => ({
       const nextLoftAreas = state.loftAreas.map((loft) => {
         if (loft.name === pigeon.loftArea) {
           const newUsed = loft.used + 1;
+          const isFull = newUsed >= loft.capacity;
           return {
             ...loft,
             used: newUsed,
-            status: newUsed >= loft.capacity ? 'full' : loft.status
+            status: isFull ? 'full' : loft.status,
+            statusText: isFull ? '已满' : loft.statusText
           };
         }
         return loft;
@@ -180,26 +182,41 @@ export const useAppStore = create<AppState>((set, get) => ({
   addRaceResult: (raceId, result) => {
     console.log('[Store] addRaceResult: raceId=', raceId, 'ringNumber=', result.ringNumber);
     set((state) => {
+      const resultWithRace = { ...result, raceId };
       const nextResults = [...state.raceResults];
       const existingIdx = nextResults.findIndex(
-        (r) => r.ringNumber === result.ringNumber
+        (r) => r.raceId === raceId && r.ringNumber === resultWithRace.ringNumber
       );
+      let isNewRecord = true;
       if (existingIdx >= 0) {
-        nextResults[existingIdx] = result;
+        nextResults[existingIdx] = resultWithRace;
+        isNewRecord = false;
       } else {
-        nextResults.push(result);
+        nextResults.push(resultWithRace);
       }
-      nextResults.sort((a, b) => a.speed - b.speed).reverse();
-      nextResults.forEach((r, idx) => {
+      const sameRaceResults = nextResults
+        .filter((r) => r.raceId === raceId)
+        .sort((a, b) => b.speed - a.speed);
+      sameRaceResults.forEach((r, idx) => {
         r.rank = idx + 1;
       });
-      const nextRaces = state.races.map((r) => {
-        if (r.id === raceId) {
-          return { ...r, returnedCount: r.returnedCount + 1 };
+      const finalResults = nextResults.map((r) => {
+        if (r.raceId === raceId) {
+          const found = sameRaceResults.find((s) => s.ringNumber === r.ringNumber);
+          return found ? { ...r, rank: found.rank } : r;
         }
         return r;
       });
-      const next = { ...state, raceResults: nextResults, races: nextRaces };
+      let nextRaces = state.races;
+      if (isNewRecord) {
+        nextRaces = state.races.map((r) => {
+          if (r.id === raceId) {
+            return { ...r, returnedCount: r.returnedCount + 1 };
+          }
+          return r;
+        });
+      }
+      const next = { ...state, raceResults: finalResults, races: nextRaces };
       try {
         Taro.setStorageSync(STORAGE_KEY, next);
       } catch (e) {
