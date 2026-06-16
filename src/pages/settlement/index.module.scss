@@ -388,3 +388,91 @@
   font-size: $font-size-sm;
   color: $color-text-tertiary;
 }
+
+.selectorCard {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+}
+
+.formItem {
+  margin-bottom: $spacing-md;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.formLabel {
+  display: block;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-xs;
+}
+
+.selector {
+  height: 72rpx;
+  background-color: $color-bg-page;
+  border-radius: $radius-md;
+  padding: 0 $spacing-md;
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.selectorText {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+}
+
+.selectorPlaceholder {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.settleSummary {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+}
+
+.settleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-sm 0;
+  border-bottom: 2rpx solid $color-divider;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.settleLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.settleValueWarn {
+  font-size: $font-size-md;
+  font-weight: $font-weight-bold;
+  color: $color-warning;
+}
+
+.settleValueGreen {
+  font-size: $font-size-md;
+  font-weight: $font-weight-bold;
+  color: $color-success;
+}
+
+.settleValueOrange {
+  font-size: $font-size-md;
+  font-weight: $font-weight-bold;
+  color: $color-warning;
+}

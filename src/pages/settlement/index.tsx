@@ -1,10 +1,25 @@
 import React, { useState, useMemo } from 'react';
 import { View, Text, ScrollView } from '@tarojs/components';
+import Taro from '@tarojs/taro';
 import SectionHeader from '@/components/SectionHeader';
 import StatusTag from '@/components/StatusTag';
 import { useAppStore } from '@/store';
 import { formatMoney } from '@/utils';
 import styles from './index.module.scss';
+
+const FEE_PER_PIGEON = 2000;
+
+const getPrizeForRank = (rank: number): number => {
+  if (rank === 1) return 100000;
+  if (rank === 2) return 50000;
+  if (rank === 3) return 30000;
+  if (rank === 4) return 15000;
+  if (rank === 5) return 10000;
+  if (rank >= 6 && rank <= 10) return 5000;
+  if (rank >= 11 && rank <= 50) return 2000;
+  if (rank >= 51) return 1000;
+  return 0;
+};
 
 const prizeDistribution = [
   { rank: 1, label: '冠军', amount: 100000 },
@@ -20,8 +35,16 @@ const prizeDistribution = [
 const SettlementPage: React.FC = () => {
   const { settlements, pigeons, raceResults, races } = useAppStore();
   const [activeTab, setActiveTab] = useState<'prize' | 'record'>('prize');
+  const [selectedRaceId, setSelectedRaceId] = useState('');
+
+  const paidCount = useMemo(() => pigeons.filter((p) => p.paid).length, [pigeons]);
 
   const totalEntryFee = useMemo(
+    () => paidCount * FEE_PER_PIGEON,
+    [paidCount]
+  );
+
+  const totalEntryFeeFromRecords = useMemo(
     () =>
       settlements
         .filter((s) => s.type === 'entryFee' && s.status === 'completed')
@@ -37,37 +60,38 @@ const SettlementPage: React.FC = () => {
     [settlements]
   );
 
-  const finalRace = useMemo(() => {
-    return races.find((r) => r.type === 'final') || races[0];
-  }, [races]);
+  const netAmount = totalEntryFee - totalPrizePaid;
 
-  const resultWithPrize = useMemo(() => {
-    return raceResults
-      .slice(0, 10)
-      .map((r) => {
-        let prize = 0;
-        if (r.rank === 1) prize = 100000;
-        else if (r.rank === 2) prize = 50000;
-        else if (r.rank === 3) prize = 30000;
-        else if (r.rank === 4) prize = 15000;
-        else if (r.rank === 5) prize = 10000;
-        else if (r.rank >= 6 && r.rank <= 10) prize = 5000;
-        else if (r.rank >= 11 && r.rank <= 50) prize = 2000;
-        else if (r.rank >= 51) prize = 1000;
-        return { ...r, prize };
-      });
-  }, [raceResults]);
-
-  const totalPrizePool = useMemo(
-    () =>
-      pigeons.filter((p) => p.paid).length * 2000 +
-      (finalRace?.prizePool || 0),
-    [pigeons, finalRace]
+  const selectedRace = useMemo(
+    () => races.find((r) => r.id === selectedRaceId),
+    [races, selectedRaceId]
   );
 
-  const netAmount = totalEntryFee - totalPrizePaid;
-  const paidCount = pigeons.filter((p) => p.paid).length;
-  const unpaidCount = pigeons.length - paidCount;
+  const racePrizeResults = useMemo(() => {
+    if (!selectedRaceId) return [];
+    return raceResults
+      .filter((r) => r.raceId === selectedRaceId)
+      .sort((a, b) => a.rank - b.rank)
+      .map((r) => ({ ...r, prize: getPrizeForRank(r.rank) }));
+  }, [raceResults, selectedRaceId]);
+
+  const raceTotalPrize = useMemo(
+    () => racePrizeResults.reduce((sum, r) => sum + r.prize, 0),
+    [racePrizeResults]
+  );
+
+  const racePrizePaid = useMemo(
+    () =>
+      settlements
+        .filter((s) => s.type !== 'entryFee' && s.status === 'completed')
+        .reduce((sum, s) => sum + Math.abs(s.amount), 0),
+    [settlements]
+  );
+
+  const racePrizePending = useMemo(
+    () => Math.max(0, raceTotalPrize - racePrizePaid),
+    [raceTotalPrize, racePrizePaid]
+  );
 
   return (
     <ScrollView scrollY className={styles.page}>
@@ -79,15 +103,15 @@ const SettlementPage: React.FC = () => {
         <View className={styles.summarySub}>
           <View className={styles.subItem}>
             <Text className={styles.subValue}>{formatMoney(totalEntryFee)}</Text>
-            <Text className={styles.subLabel}>参赛费收入</Text>
+            <Text className={styles.subLabel}>参赛费收入({paidCount}羽)</Text>
           </View>
           <View className={styles.subItem}>
             <Text className={styles.subValue}>{formatMoney(totalPrizePaid)}</Text>
             <Text className={styles.subLabel}>奖金支出</Text>
           </View>
           <View className={styles.subItem}>
-            <Text className={styles.subValue}>{paidCount}羽</Text>
-            <Text className={styles.subLabel}>已缴费</Text>
+            <Text className={styles.subValue}>{formatMoney(totalEntryFeeFromRecords)}</Text>
+            <Text className={styles.subLabel}>已到账</Text>
           </View>
         </View>
       </View>
@@ -109,54 +133,102 @@ const SettlementPage: React.FC = () => {
 
       {activeTab === 'prize' && (
         <>
-          <SectionHeader
-            title={finalRace ? `${finalRace.name} 奖金分配` : '奖金分配'}
-          />
-          <View className={styles.prizeCard}>
-            <View className={styles.prizeHeader}>
-              <View className={styles.prizeHeaderInner}>
-                <Text className={styles.prizeTitle}>奖金池</Text>
-                <Text style={{ fontSize: 40, fontWeight: 700, color: '#FF9800' }}>
-                  {formatMoney(totalPrizePool)}
+          <View className={styles.selectorCard}>
+            <View className={styles.formItem}>
+              <Text className={styles.formLabel}>选择比赛</Text>
+              <View
+                className={styles.selector}
+                onClick={() => {
+                  const items = races.map((r) => r.name);
+                  if (items.length === 0) {
+                    Taro.showToast({ title: '暂无比赛', icon: 'none' });
+                    return;
+                  }
+                  Taro.showActionSheet({
+                    itemList: items,
+                    success: (res) => {
+                      setSelectedRaceId(races[res.tapIndex].id);
+                    }
+                  });
+                }}
+              >
+                <Text
+                  className={
+                    selectedRaceId
+                      ? styles.selectorText
+                      : styles.selectorPlaceholder
+                  }
+                >
+                  {selectedRace
+                    ? selectedRace.name
+                    : '请选择比赛查看奖金分配'}
                 </Text>
+                <Text style={{ color: '#86909C' }}>›</Text>
               </View>
-              <View className={styles.prizeStats}>
-                <View className={styles.prizeStat}>
-                  <Text className={styles.prizeStatNum}>{paidCount}</Text>
-                  <Text className={styles.prizeStatLabel}>已缴费赛鸽</Text>
-                </View>
-                <View className={styles.prizeStat}>
-                  <Text className={styles.prizeStatNum}>{unpaidCount}</Text>
-                  <Text className={styles.prizeStatLabel}>未缴费</Text>
-                </View>
-              </View>
-            </View>
-            <View className={styles.prizeList}>
-              {prizeDistribution.map((item) => (
-                <View key={item.rank} className={styles.prizeRow}>
-                  <View className={styles.prizeRank}>
-                    <View
-                      className={`${styles.rankNum} ${
-                        item.rank <= 3 ? styles[`top${item.rank}`] : ''
-                      }`}
-                    >
-                      <Text>{item.rank}</Text>
-                    </View>
-                    <Text className={styles.rankLabel}>{item.label}</Text>
-                  </View>
-                  <Text className={styles.prizeAmount}>
-                    {formatMoney(item.amount)}
-                  </Text>
-                </View>
-              ))}
             </View>
           </View>
 
-          {resultWithPrize.length > 0 && (
+          {selectedRace && (
+            <View className={styles.prizeCard}>
+              <View className={styles.prizeHeader}>
+                <View className={styles.prizeHeaderInner}>
+                  <Text className={styles.prizeTitle}>奖金池</Text>
+                  <Text style={{ fontSize: 40, fontWeight: 700, color: '#FF9800' }}>
+                    {formatMoney(selectedRace.prizePool + paidCount * FEE_PER_PIGEON)}
+                  </Text>
+                </View>
+                <View className={styles.prizeStats}>
+                  <View className={styles.prizeStat}>
+                    <Text className={styles.prizeStatNum}>{paidCount}</Text>
+                    <Text className={styles.prizeStatLabel}>已缴费赛鸽</Text>
+                  </View>
+                  <View className={styles.prizeStat}>
+                    <Text className={styles.prizeStatNum}>{pigeons.length - paidCount}</Text>
+                    <Text className={styles.prizeStatLabel}>未缴费</Text>
+                  </View>
+                </View>
+              </View>
+              <View className={styles.prizeList}>
+                {prizeDistribution.map((item) => (
+                  <View key={item.rank} className={styles.prizeRow}>
+                    <View className={styles.prizeRank}>
+                      <View
+                        className={`${styles.rankNum} ${
+                          item.rank <= 3 ? styles[`top${item.rank}`] : ''
+                        }`}
+                      >
+                        <Text>{item.rank}</Text>
+                      </View>
+                      <Text className={styles.rankLabel}>{item.label}</Text>
+                    </View>
+                    <Text className={styles.prizeAmount}>
+                      {formatMoney(item.amount)}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+            </View>
+          )}
+
+          {racePrizeResults.length > 0 && (
             <>
-              <SectionHeader title="已出成绩分配" />
+              <SectionHeader title="已出成绩奖金" />
               <View className={styles.resultCard}>
-                {resultWithPrize.map((r) => (
+                <View className={styles.resultRow} style={{ borderBottomWidth: 2, borderBottomColor: '#E5E6EB' }}>
+                  <View className={styles.resultRank}>
+                    <Text className={styles.resultRankNum}>名次</Text>
+                  </View>
+                  <View className={styles.resultInfo}>
+                    <Text className={styles.resultRing}>赛鸽</Text>
+                  </View>
+                  <View className={styles.resultSpeed}>
+                    <Text className={styles.resultSpeedVal}>分速</Text>
+                  </View>
+                  <View className={styles.resultPrize}>
+                    <Text className={styles.resultPrizeVal}>奖金</Text>
+                  </View>
+                </View>
+                {racePrizeResults.map((r) => (
                   <View key={`${r.raceId}-${r.ringNumber}`} className={styles.resultRow}>
                     <View className={styles.resultRank}>
                       <Text className={styles.resultRankNum}>第{r.rank}名</Text>
@@ -178,7 +250,27 @@ const SettlementPage: React.FC = () => {
                   </View>
                 ))}
               </View>
+              <View className={styles.settleSummary}>
+                <View className={styles.settleRow}>
+                  <Text className={styles.settleLabel}>应发奖金合计</Text>
+                  <Text className={styles.settleValueWarn}>{formatMoney(raceTotalPrize)}</Text>
+                </View>
+                <View className={styles.settleRow}>
+                  <Text className={styles.settleLabel}>已发放</Text>
+                  <Text className={styles.settleValueGreen}>{formatMoney(racePrizePaid)}</Text>
+                </View>
+                <View className={styles.settleRow}>
+                  <Text className={styles.settleLabel}>待发放</Text>
+                  <Text className={styles.settleValueOrange}>{formatMoney(racePrizePending)}</Text>
+                </View>
+              </View>
             </>
+          )}
+
+          {!selectedRaceId && (
+            <View className={styles.emptyBox}>
+              <Text className={styles.emptyText}>请选择比赛查看奖金分配</Text>
+            </View>
           )}
         </>
       )}

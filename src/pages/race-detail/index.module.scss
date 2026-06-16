@@ -1,28 +1,300 @@
 @use '@/styles/variables.scss' as *;
 
 .page {
+  padding: 0 $page-padding $spacing-xl;
+  min-height: 100vh;
+}
+
+.header {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-md 0;
+  margin-bottom: $spacing-md;
+}
+
+.backBtn {
+  width: 64rpx;
+  height: 64rpx;
+  display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 80vh;
-  padding: $page-padding;
 }
 
-.icon {
-  font-size: 120rpx;
-  margin-bottom: $spacing-lg;
-  opacity: 0.5;
+.backIcon {
+  font-size: 48rpx;
+  color: $color-text-primary;
+  font-weight: 700;
 }
 
-.title {
-  font-size: $font-size-xl;
+.headerTitle {
+  font-size: $font-size-lg;
   font-weight: $font-weight-semibold;
   color: $color-text-primary;
+}
+
+.infoCard {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+}
+
+.infoGrid {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.infoRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-xs 0;
+}
+
+.infoLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.infoValue {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+}
+
+.progressCard {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+}
+
+.sectionTitle {
+  display: block;
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.progressBar {
+  height: 16rpx;
+  background-color: $color-bg-page;
+  border-radius: 8rpx;
+  overflow: hidden;
   margin-bottom: $spacing-sm;
 }
 
-.desc {
+.progressFill {
+  height: 100%;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: 8rpx;
+  transition: width $transition-base;
+}
+
+.progressText {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-md;
+  display: block;
+}
+
+.statRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: $spacing-md 0;
+}
+
+.statBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rpx;
+}
+
+.statNum {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+}
+
+.statNumGreen {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-success;
+}
+
+.statNumOrange {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-warning;
+}
+
+.statLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.statDivider {
+  width: 2rpx;
+  height: 48rpx;
+  background-color: $color-divider;
+}
+
+.unreturnedList {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  box-shadow: $shadow-card;
+}
+
+.unreturnedRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-md $spacing-lg;
+  border-bottom: 2rpx solid $color-divider;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.unreturnedRing {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  display: block;
+}
+
+.unreturnedOwner {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  display: block;
+  margin-top: 4rpx;
+}
+
+.resultTable {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+}
+
+.tableHeader {
+  display: flex;
+  align-items: center;
+  background-color: $color-bg-page;
+  padding: $spacing-md $spacing-lg;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-text-secondary;
+}
+
+.tableRow {
+  display: flex;
+  align-items: center;
+  padding: $spacing-md $spacing-lg;
+  border-bottom: 2rpx solid $color-divider;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.colRank {
+  width: 80rpx;
+  flex-shrink: 0;
+}
+
+.colPigeon {
+  flex: 1;
+  min-width: 0;
+}
+
+.colSpeed {
+  width: 140rpx;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.rankBadge {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  color: $color-text-white;
+
+  &.top1 {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+  }
+
+  &.top2 {
+    background: linear-gradient(135deg, #C0C0C0 0%, #A0A0A0 100%);
+  }
+
+  &.top3 {
+    background: linear-gradient(135deg, #CD7F32 0%, #8B4513 100%);
+  }
+
+  &.normal {
+    background-color: $color-bg-page;
+    color: $color-text-secondary;
+    font-weight: $font-weight-medium;
+  }
+}
+
+.pigeonInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.pigeonRing {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  @include text-ellipsis;
+}
+
+.pigeonOwner {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  @include text-ellipsis;
+}
+
+.pigeonDuration {
+  font-size: $font-size-xs;
+  color: $color-primary;
+}
+
+.speedValue {
   font-size: $font-size-md;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+}
+
+.speedUnit {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.emptyBox {
+  padding: $spacing-xxl 0;
+  text-align: center;
+}
+
+.emptyText {
+  font-size: $font-size-sm;
   color: $color-text-tertiary;
 }

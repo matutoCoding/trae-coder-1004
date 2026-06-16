@@ -2,11 +2,10 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { View, Text, ScrollView, Button, Input } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import SectionHeader from '@/components/SectionHeader';
-import RaceCard from '@/components/RaceCard';
 import StatusTag from '@/components/StatusTag';
 import { useAppStore } from '@/store';
 import { calcSpeed, calcDurationMinutes, formatDuration } from '@/utils';
-import type { Race, RaceResult, Pigeon } from '@/types';
+import type { RaceResult } from '@/types';
 import styles from './index.module.scss';
 
 type TabKey = 'race' | 'release' | 'timing' | 'training' | 'result';
@@ -194,7 +193,36 @@ const RacePage: React.FC = () => {
         <>
           <SectionHeader title="比赛列表" />
           {races.map((race) => (
-            <RaceCard key={race.id} race={race} />
+            <View
+              key={race.id}
+              className={styles.trainingCard}
+              onClick={() => Taro.navigateTo({ url: `/pages/race-detail/index?id=${race.id}` })}
+            >
+              <View className={styles.trainingHeader}>
+                <View className={styles.trainingType}>
+                  <Text className={styles.trainingName}>{race.name}</Text>
+                </View>
+                <StatusTag status={race.status} text={race.statusText} />
+              </View>
+              <View className={styles.trainingInfo}>
+                <View className={styles.infoCol}>
+                  <Text className={styles.infoValue}>{race.location}</Text>
+                  <Text className={styles.infoLabel}>放飞地点</Text>
+                </View>
+                <View className={styles.infoCol}>
+                  <Text className={styles.infoValue}>{race.distance}km</Text>
+                  <Text className={styles.infoLabel}>空距</Text>
+                </View>
+                <View className={styles.infoCol}>
+                  <Text className={styles.infoValue}>{race.date}</Text>
+                  <Text className={styles.infoLabel}>日期</Text>
+                </View>
+              </View>
+              <View className={styles.trainingMeta}>
+                <Text>参赛：{race.totalPigeons} 羽</Text>
+                <Text>归巢：{race.returnedCount}/{race.totalPigeons}</Text>
+              </View>
+            </View>
           ))}
         </>
       )}
