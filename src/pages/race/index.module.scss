@@ -1,0 +1,228 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  padding: 0 $page-padding $spacing-xl;
+}
+
+.tabs {
+  display: flex;
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-xs;
+  margin-bottom: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.tabItem {
+  flex: 1;
+  padding: $spacing-sm 0;
+  text-align: center;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-text-secondary;
+  border-radius: $radius-md;
+  transition: all $transition-base;
+
+  &.active {
+    background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+    color: $color-text-white;
+    font-weight: $font-weight-semibold;
+  }
+}
+
+.trainingCard {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+}
+
+.trainingHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.trainingType {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.typeIcon {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: $radius-sm;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+
+  &.home {
+    background-color: $color-bg-blue;
+    color: $color-primary;
+  }
+
+  &.short {
+    background-color: $color-bg-green;
+    color: $color-success;
+  }
+
+  &.long {
+    background-color: $color-bg-orange;
+    color: $color-warning;
+  }
+}
+
+.trainingName {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.trainingInfo {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-sm;
+  margin-bottom: $spacing-md;
+  padding: $spacing-md;
+  background-color: $color-bg-page;
+  border-radius: $radius-md;
+}
+
+.infoCol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rpx;
+}
+
+.infoValue {
+  font-size: $font-size-md;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+}
+
+.infoLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.trainingMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.resultTable {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+}
+
+.tableHeader {
+  display: flex;
+  align-items: center;
+  background-color: $color-bg-page;
+  padding: $spacing-md $spacing-lg;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-text-secondary;
+}
+
+.tableRow {
+  display: flex;
+  align-items: center;
+  padding: $spacing-md $spacing-lg;
+  border-bottom: 2rpx solid $color-divider;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:active {
+    background-color: $color-bg-hover;
+  }
+}
+
+.colRank {
+  width: 80rpx;
+  flex-shrink: 0;
+}
+
+.colPigeon {
+  flex: 1;
+  min-width: 0;
+}
+
+.colSpeed {
+  width: 140rpx;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.rankBadge {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  color: $color-text-white;
+
+  &.top1 {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+  }
+
+  &.top2 {
+    background: linear-gradient(135deg, #C0C0C0 0%, #A0A0A0 100%);
+  }
+
+  &.top3 {
+    background: linear-gradient(135deg, #CD7F32 0%, #8B4513 100%);
+  }
+
+  &.normal {
+    background-color: $color-bg-page;
+    color: $color-text-secondary;
+    font-weight: $font-weight-medium;
+  }
+}
+
+.pigeonInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.pigeonRing {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  @include text-ellipsis;
+}
+
+.pigeonOwner {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  @include text-ellipsis;
+}
+
+.speedValue {
+  font-size: $font-size-md;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+}
+
+.speedUnit {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}

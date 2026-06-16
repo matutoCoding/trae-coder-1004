@@ -1,0 +1,107 @@
+@use '@/styles/variables.scss' as *;
+
+.card {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+  transition: all $transition-base;
+
+  &:active {
+    opacity: 0.9;
+    transform: scale(0.99);
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-sm;
+}
+
+.typeBadge {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  padding: 6rpx 20rpx;
+  border-radius: $radius-sm;
+}
+
+.typeText {
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  color: $color-text-white;
+}
+
+.name {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+  @include text-ellipsis;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-lg;
+}
+
+.infoItem {
+  display: flex;
+  flex-direction: column;
+}
+
+.infoLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-bottom: 4rpx;
+}
+
+.infoValue {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+}
+
+.statsBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: $color-bg-page;
+  border-radius: $radius-md;
+  padding: $spacing-md $spacing-sm;
+}
+
+.statItem {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.statValue {
+  font-size: $font-size-md;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+  margin-bottom: 4rpx;
+}
+
+.statValuePrize {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  color: $color-warning;
+  margin-bottom: 4rpx;
+}
+
+.statLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.divider {
+  width: 2rpx;
+  height: 48rpx;
+  background-color: $color-border;
+}

@@ -1,0 +1,320 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  padding-bottom: $spacing-xl;
+}
+
+.profileHeader {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 50%, #64B5F6 100%);
+  padding: $spacing-xl $page-padding $spacing-xxl;
+  margin: 0 (-$page-padding) $spacing-lg;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -80rpx;
+    right: -60rpx;
+    width: 280rpx;
+    height: 280rpx;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+  }
+}
+
+.profileTop {
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing-xl;
+  position: relative;
+  z-index: 1;
+}
+
+.avatar {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 50%;
+  border: 4rpx solid rgba(255, 255, 255, 0.5);
+  background-color: #fff;
+  margin-right: $spacing-lg;
+}
+
+.profileInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+}
+
+.profileName {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-text-white;
+}
+
+.profilePhone {
+  font-size: $font-size-sm;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.profileId {
+  font-size: $font-size-xs;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 4rpx 16rpx;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: $radius-button;
+  display: inline-flex;
+  width: fit-content;
+}
+
+.statsRow {
+  display: flex;
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: $radius-lg;
+  padding: $spacing-md;
+  position: relative;
+  z-index: 1;
+}
+
+.statItem {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rpx;
+}
+
+.statValue {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-text-white;
+}
+
+.statLabel {
+  font-size: $font-size-xs;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.statDivider {
+  width: 2rpx;
+  height: 60rpx;
+  background-color: rgba(255, 255, 255, 0.2);
+  align-self: center;
+}
+
+.serviceGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $spacing-md;
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin: 0 $page-padding $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.serviceItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-xs;
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.serviceIcon {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: $radius-md;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  background-color: #E3F2FD;
+  color: $color-primary;
+}
+
+.serviceText {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+}
+
+.section {
+  margin: 0 $page-padding;
+  margin-bottom: $spacing-lg;
+}
+
+.liveCard {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  position: relative;
+  overflow: hidden;
+}
+
+.liveHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.liveTitle {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.liveBadge {
+  padding: 4rpx 16rpx;
+  background: linear-gradient(90deg, #FF4D4F 0%, #FF7875 100%);
+  border-radius: $radius-button;
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+}
+
+.liveDot {
+  width: 12rpx;
+  height: 12rpx;
+  background-color: #fff;
+  border-radius: 50%;
+}
+
+.liveBadgeText {
+  font-size: $font-size-xs;
+  color: #fff;
+  font-weight: $font-weight-medium;
+}
+
+.liveName {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.liveInfo {
+  display: flex;
+  gap: $spacing-lg;
+  margin-bottom: $spacing-md;
+}
+
+.liveInfoItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.liveInfoValue {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+}
+
+.liveInfoLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.livePreview {
+  width: 100%;
+  height: 300rpx;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  border-radius: $radius-md;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.livePlayIcon {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+  font-size: 48rpx;
+}
+
+.feeCard {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+}
+
+.feeRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-md 0;
+  border-bottom: 2rpx solid $color-divider;
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  &:first-child {
+    padding-top: 0;
+  }
+}
+
+.feeInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.feeName {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+}
+
+.feeDesc {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.feeAction {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+}
+
+.feeAmount {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-error;
+}
+
+.payBtn {
+  @include button-reset;
+  height: $button-height-sm;
+  padding: 0 $spacing-lg;
+  border-radius: $radius-button;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  color: $color-text-white;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+
+  &:active {
+    opacity: 0.9;
+  }
+
+  &.paid {
+    background-color: $color-bg-green;
+    color: $color-success;
+    background-image: none;
+  }
+}
