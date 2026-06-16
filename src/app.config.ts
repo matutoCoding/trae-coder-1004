@@ -7,7 +7,8 @@ export default defineAppConfig({
     'pages/owner/index',
     'pages/pigeon-register/index',
     'pages/race-detail/index',
-    'pages/pigeon-detail/index'
+    'pages/pigeon-detail/index',
+    'pages/live-stream/index'
   ],
   window: {
     backgroundTextStyle: 'light',

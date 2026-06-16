@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, Input, Button } from '@tarojs/components';
 import Taro from '@tarojs/taro';
-import { mockLoftAreas } from '@/data/mockPigeons';
+import { useAppStore } from '@/store';
+import type { Pigeon } from '@/types';
 import styles from './index.module.scss';
 
 const PigeonRegisterPage: React.FC = () => {
+  const { loftAreas, addPigeon } = useAppStore();
   const [formData, setFormData] = useState({
     ringNumber: '',
     electronicRing: '',
@@ -18,29 +20,38 @@ const PigeonRegisterPage: React.FC = () => {
     loftArea: ''
   });
 
+  const availableLofts = loftAreas.filter(
+    (l) => l.status === 'normal' && l.used < l.capacity
+  );
+
   const handleInput = (key: string, value: string) => {
-    console.log('[Register] Input change:', key, value);
-    setFormData(prev => ({ ...prev, [key]: value }));
+    setFormData((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleSelectLoft = () => {
-    console.log('[Register] Select loft area');
+    if (availableLofts.length === 0) {
+      Taro.showToast({
+        title: '暂无可选棚位',
+        icon: 'none'
+      });
+      return;
+    }
     Taro.showActionSheet({
-      itemList: mockLoftAreas.filter(l => l.status === 'normal').map(l => l.name),
+      itemList: availableLofts.map(
+        (l) => `${l.name}（剩余 ${l.capacity - l.used}/${l.capacity}）`
+      ),
       success: (res) => {
-        const selectedLoft = mockLoftAreas.filter(l => l.status === 'normal')[res.tapIndex];
-        setFormData(prev => ({ ...prev, loftArea: selectedLoft.name }));
+        const selectedLoft = availableLofts[res.tapIndex];
+        setFormData((prev) => ({ ...prev, loftArea: selectedLoft.name }));
       }
     });
   };
 
   const handleUploadImage = () => {
-    console.log('[Register] Upload image');
     Taro.showToast({ title: '图片上传功能开发中', icon: 'none' });
   };
 
   const handleSubmit = () => {
-    console.log('[Register] Submit form data:', formData);
     if (!formData.ringNumber) {
       Taro.showToast({ title: '请输入足环号', icon: 'none' });
       return;
@@ -64,16 +75,36 @@ const PigeonRegisterPage: React.FC = () => {
 
     Taro.showLoading({ title: '提交中...' });
     setTimeout(() => {
+      const newPigeon: Pigeon = {
+        id: `p_${Date.now()}`,
+        ringNumber: formData.ringNumber,
+        electronicRing: formData.electronicRing,
+        name: formData.name || `未命名-${formData.ringNumber.slice(-4)}`,
+        ownerName: formData.ownerName,
+        ownerPhone: formData.ownerPhone,
+        breed: formData.breed || '未知',
+        gender: formData.gender,
+        birthDate: formData.birthDate || '2024-01-01',
+        color: formData.color || '灰',
+        status: 'health',
+        statusText: '健康',
+        loftArea: formData.loftArea,
+        entryDate: new Date().toISOString().slice(0, 10),
+        paid: false,
+        raceCount: 0,
+        avatar: ''
+      };
+
+      addPigeon(newPigeon);
       Taro.hideLoading();
       Taro.showToast({ title: '登记成功', icon: 'success' });
       setTimeout(() => {
-        Taro.navigateBack();
-      }, 1500);
-    }, 1000);
+        Taro.switchTab({ url: '/pages/loft/index' });
+      }, 1200);
+    }, 600);
   };
 
   const handleReset = () => {
-    console.log('[Register] Reset form');
     setFormData({
       ringNumber: '',
       electronicRing: '',
@@ -182,7 +213,9 @@ const PigeonRegisterPage: React.FC = () => {
                 className={styles.radioItem}
                 onClick={() => handleInput('gender', '雄')}
               >
-                <View className={`${styles.radioCircle} ${formData.gender === '雄' ? styles.active : ''}`}>
+                <View
+                  className={`${styles.radioCircle} ${formData.gender === '雄' ? styles.active : ''}`}
+                >
                   {formData.gender === '雄' && <View className={styles.radioDot}></View>}
                 </View>
                 <Text className={styles.radioText}>雄</Text>
@@ -191,7 +224,9 @@ const PigeonRegisterPage: React.FC = () => {
                 className={styles.radioItem}
                 onClick={() => handleInput('gender', '雌')}
               >
-                <View className={`${styles.radioCircle} ${formData.gender === '雌' ? styles.active : ''}`}>
+                <View
+                  className={`${styles.radioCircle} ${formData.gender === '雌' ? styles.active : ''}`}
+                >
                   {formData.gender === '雌' && <View className={styles.radioDot}></View>}
                 </View>
                 <Text className={styles.radioText}>雌</Text>
@@ -227,7 +262,9 @@ const PigeonRegisterPage: React.FC = () => {
             入棚位置
           </Text>
           <View className={styles.loftSelector} onClick={handleSelectLoft}>
-            <Text className={`${styles.loftText} ${!formData.loftArea ? styles.placeholder : ''}`}>
+            <Text
+              className={`${styles.loftText} ${!formData.loftArea ? styles.placeholder : ''}`}
+            >
               {formData.loftArea || '请选择入棚位置'}
             </Text>
             <Text style={{ color: '#86909C' }}>›</Text>
@@ -244,7 +281,10 @@ const PigeonRegisterPage: React.FC = () => {
       </View>
 
       <View className={styles.submitBar}>
-        <Button className={`${styles.submitBtn} ${styles.secondary}`} onClick={handleReset}>
+        <Button
+          className={`${styles.submitBtn} ${styles.secondary}`}
+          onClick={handleReset}
+        >
           重置
         </Button>
         <Button className={styles.submitBtn} onClick={handleSubmit}>

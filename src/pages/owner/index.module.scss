@@ -38,6 +38,13 @@
   border: 4rpx solid rgba(255, 255, 255, 0.5);
   background-color: #fff;
   margin-right: $spacing-lg;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatarIcon {
+  font-size: 72rpx;
 }
 
 .profileInfo {
@@ -317,4 +324,63 @@
     color: $color-success;
     background-image: none;
   }
+}
+
+.feeHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.payAllBtn {
+  @include button-reset;
+  height: $button-height-sm;
+  padding: 0 $spacing-md;
+  border-radius: $radius-button;
+  background: linear-gradient(135deg, #FF7D00 0%, #FF9800 100%);
+  color: $color-text-white;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+
+  &:active {
+    opacity: 0.9;
+  }
+}
+
+.feeSummary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, $color-bg-blue 0%, #E8F5E9 100%);
+  border-radius: $radius-md;
+  padding: $spacing-md $spacing-lg;
+  margin-bottom: $spacing-md;
+}
+
+.feeSummaryItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.feeSummaryLabel {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+}
+
+.feeSummaryValue {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+}
+
+.emptyBox {
+  padding: $spacing-xxl 0;
+  text-align: center;
+}
+
+.emptyText {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
 }

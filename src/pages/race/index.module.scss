@@ -11,11 +11,14 @@
   padding: $spacing-xs;
   margin-bottom: $spacing-lg;
   box-shadow: $shadow-card;
+  gap: $spacing-xs;
+  overflow-x: auto;
+  white-space: nowrap;
 }
 
 .tabItem {
-  flex: 1;
-  padding: $spacing-sm 0;
+  flex-shrink: 0;
+  padding: $spacing-sm $spacing-md;
   text-align: center;
   font-size: $font-size-sm;
   font-weight: $font-weight-medium;
@@ -224,5 +227,151 @@
 
 .speedUnit {
   font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.pigeonDuration {
+  font-size: $font-size-xs;
+  color: $color-primary;
+}
+
+.formCard {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.formTitle {
+  display: block;
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.formItem {
+  margin-bottom: $spacing-md;
+}
+
+.formLabel {
+  display: block;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-xs;
+}
+
+.required {
+  color: #F5222D;
+  margin-right: $spacing-xs;
+}
+
+.formInput {
+  width: 100%;
+  height: $button-height-md;
+  background-color: $color-bg-page;
+  border-radius: $radius-md;
+  padding: 0 $spacing-md;
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  border: none;
+  outline: none;
+}
+
+.selector {
+  height: $button-height-md;
+  background-color: $color-bg-page;
+  border-radius: $radius-md;
+  padding: 0 $spacing-md;
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.selectorText {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+}
+
+.selectorPlaceholder {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.timeBox {
+  background-color: $color-bg-page;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4rpx;
+}
+
+.timeValue {
+  font-size: 40rpx;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+  font-family: 'Courier New', monospace;
+}
+
+.timeLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.raceInfoBox {
+  background-color: $color-bg-page;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  margin-bottom: $spacing-md;
+}
+
+.raceInfoRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-xs 0;
+}
+
+.raceInfoLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.raceInfoValue {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+}
+
+.submitBtn {
+  width: 100%;
+  height: $button-height-lg;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  color: $color-text-white;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  border-radius: $radius-button;
+  border: none;
+  margin-top: $spacing-sm;
+
+  &:active {
+    opacity: 0.9;
+    transform: scale(0.98);
+  }
+}
+
+.emptyBox {
+  padding: $spacing-xxl 0;
+  text-align: center;
+}
+
+.emptyText {
+  font-size: $font-size-sm;
   color: $color-text-tertiary;
 }

@@ -1,0 +1,359 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background-color: $color-bg-page;
+  padding-bottom: $spacing-xl;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  height: 96rpx;
+  padding: 0 $spacing-md;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  color: $color-text-white;
+  position: relative;
+}
+
+.backBtn {
+  width: 64rpx;
+  height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+}
+
+.backIcon {
+  font-size: 48rpx;
+  line-height: 1;
+  color: $color-text-white;
+  margin-top: -4rpx;
+}
+
+.headerTitle {
+  flex: 1;
+  text-align: center;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-white;
+}
+
+.liveBadge {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  background: rgba(229, 57, 53, 0.9);
+  padding: $spacing-xs $spacing-md;
+  border-radius: $radius-button;
+}
+
+.liveDot {
+  width: 14rpx;
+  height: 14rpx;
+  background-color: $color-text-white;
+  border-radius: 50%;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.liveText {
+  font-size: $font-size-xs;
+  color: $color-text-white;
+  font-weight: $font-weight-medium;
+}
+
+.videoArea {
+  position: relative;
+  margin: $spacing-md;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  box-shadow: $shadow-card;
+}
+
+.videoPlaceholder {
+  background: linear-gradient(180deg, #1a237e 0%, #0d47a1 50%, #1976d2 100%);
+  padding: $spacing-xxl $spacing-lg;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 480rpx;
+}
+
+.videoIcon {
+  font-size: 80rpx;
+  margin-bottom: $spacing-md;
+}
+
+.videoTitle {
+  font-size: $font-size-lg;
+  color: $color-text-white;
+  font-weight: $font-weight-semibold;
+  margin-bottom: $spacing-xs;
+}
+
+.videoSub {
+  font-size: $font-size-xs;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: $spacing-lg;
+}
+
+.videoGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-sm;
+  width: 100%;
+  max-width: 480rpx;
+}
+
+.gridCell {
+  aspect-ratio: 1;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: $radius-md;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gridEmoji {
+  font-size: 40rpx;
+}
+
+.videoOverlay {
+  position: absolute;
+  top: $spacing-md;
+  left: $spacing-md;
+  right: $spacing-md;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.overlayTime {
+  font-size: $font-size-sm;
+  color: $color-text-white;
+  background: rgba(0, 0, 0, 0.5);
+  padding: $spacing-xs $spacing-md;
+  border-radius: $radius-sm;
+  font-family: 'Courier New', monospace;
+  font-weight: $font-weight-bold;
+}
+
+.overlayMeta {
+  font-size: $font-size-xs;
+  color: $color-text-white;
+  background: rgba(0, 0, 0, 0.5);
+  padding: $spacing-xs $spacing-md;
+  border-radius: $radius-sm;
+}
+
+.raceCard {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  margin: $spacing-md;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.raceTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.raceName {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.raceGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-md;
+  margin-bottom: $spacing-md;
+  padding: $spacing-md;
+  background-color: $color-bg-page;
+  border-radius: $radius-md;
+}
+
+.raceInfoItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.raceInfoLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.raceInfoValue {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+}
+
+.statRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+  border-radius: $radius-md;
+  padding: $spacing-md 0;
+}
+
+.statBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rpx;
+}
+
+.statNum {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+}
+
+.statNumGreen {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-success;
+}
+
+.statNumOrange {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-warning;
+}
+
+.statLabel {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+}
+
+.statDivider {
+  width: 2rpx;
+  height: 56rpx;
+  background-color: rgba(30, 136, 229, 0.2);
+}
+
+.timeline {
+  margin: 0 $spacing-md;
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.timelineItem {
+  display: flex;
+  gap: $spacing-md;
+  padding: $spacing-md 0;
+  border-bottom: 2rpx solid $color-divider;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.timelineLeft {
+  flex-shrink: 0;
+  padding-top: 4rpx;
+}
+
+.rankDot {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.15);
+}
+
+.rankText {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  color: $color-text-white;
+}
+
+.timelineBody {
+  flex: 1;
+  min-width: 0;
+}
+
+.timelineRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4rpx;
+}
+
+.ringNum {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.speedBadge {
+  font-size: $font-size-xs;
+  color: $color-primary;
+  background-color: $color-bg-blue;
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $radius-sm;
+  font-weight: $font-weight-semibold;
+}
+
+.timelineMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4rpx;
+}
+
+.ownerTxt {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+}
+
+.timeTxt {
+  font-size: $font-size-xs;
+  color: $color-success;
+  font-weight: $font-weight-medium;
+}
+
+.timelineDuration {
+  margin-top: 4rpx;
+}
+
+.durTxt {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.emptyBox {
+  padding: $spacing-xxl 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.emptyIcon {
+  font-size: 80rpx;
+}
+
+.emptyText {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}

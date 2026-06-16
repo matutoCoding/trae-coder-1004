@@ -13,12 +13,11 @@ export const mockPigeons: Pigeon[] = [
     birthDate: '2024-03-15',
     color: '雨点',
     loftArea: 'A区-1号棚',
-    status: 'healthy',
+    status: 'health',
     statusText: '健康',
-    receiveDate: '2024-05-10',
-    avatar: 'https://picsum.photos/id/237/200/200',
-    feeStatus: 'paid',
-    trainingCount: 12,
+    entryDate: '2024-05-10',
+    avatar: '',
+    paid: true,
     raceCount: 3
   },
   {
@@ -35,10 +34,9 @@ export const mockPigeons: Pigeon[] = [
     loftArea: 'A区-2号棚',
     status: 'training',
     statusText: '训练中',
-    receiveDate: '2024-04-25',
-    avatar: 'https://picsum.photos/id/1025/200/200',
-    feeStatus: 'paid',
-    trainingCount: 15,
+    entryDate: '2024-04-25',
+    avatar: '',
+    paid: true,
     raceCount: 2
   },
   {
@@ -55,10 +53,9 @@ export const mockPigeons: Pigeon[] = [
     loftArea: 'B区-1号棚',
     status: 'racing',
     statusText: '比赛中',
-    receiveDate: '2024-05-20',
-    avatar: 'https://picsum.photos/id/1062/200/200',
-    feeStatus: 'paid',
-    trainingCount: 18,
+    entryDate: '2024-05-20',
+    avatar: '',
+    paid: true,
     raceCount: 4
   },
   {
@@ -75,10 +72,9 @@ export const mockPigeons: Pigeon[] = [
     loftArea: 'A区-1号棚',
     status: 'returned',
     statusText: '已归巢',
-    receiveDate: '2024-03-15',
-    avatar: 'https://picsum.photos/id/1074/200/200',
-    feeStatus: 'paid',
-    trainingCount: 20,
+    entryDate: '2024-03-15',
+    avatar: '',
+    paid: true,
     raceCount: 5
   },
   {
@@ -93,12 +89,11 @@ export const mockPigeons: Pigeon[] = [
     birthDate: '2024-03-28',
     color: '红轮',
     loftArea: 'B区-2号棚',
-    status: 'healthy',
+    status: 'health',
     statusText: '健康',
-    receiveDate: '2024-06-01',
-    avatar: 'https://picsum.photos/id/1080/200/200',
-    feeStatus: 'unpaid',
-    trainingCount: 8,
+    entryDate: '2024-06-01',
+    avatar: '',
+    paid: false,
     raceCount: 1
   },
   {
@@ -115,10 +110,9 @@ export const mockPigeons: Pigeon[] = [
     loftArea: 'C区-1号棚',
     status: 'lost',
     statusText: '未归巢',
-    receiveDate: '2024-04-10',
-    avatar: 'https://picsum.photos/id/1011/200/200',
-    feeStatus: 'paid',
-    trainingCount: 10,
+    entryDate: '2024-04-10',
+    avatar: '',
+    paid: true,
     raceCount: 2
   },
   {
@@ -133,12 +127,11 @@ export const mockPigeons: Pigeon[] = [
     birthDate: '2024-01-25',
     color: '灰白条',
     loftArea: 'A区-3号棚',
-    status: 'healthy',
+    status: 'health',
     statusText: '健康',
-    receiveDate: '2024-03-20',
-    avatar: 'https://picsum.photos/id/718/200/200',
-    feeStatus: 'paid',
-    trainingCount: 22,
+    entryDate: '2024-03-20',
+    avatar: '',
+    paid: true,
     raceCount: 6
   },
   {
@@ -155,10 +148,9 @@ export const mockPigeons: Pigeon[] = [
     loftArea: 'B区-1号棚',
     status: 'training',
     statusText: '训练中',
-    receiveDate: '2024-06-05',
-    avatar: 'https://picsum.photos/id/783/200/200',
-    feeStatus: 'unpaid',
-    trainingCount: 6,
+    entryDate: '2024-06-05',
+    avatar: '',
+    paid: false,
     raceCount: 0
   },
   {
@@ -175,10 +167,9 @@ export const mockPigeons: Pigeon[] = [
     loftArea: 'C区-2号棚',
     status: 'returned',
     statusText: '已归巢',
-    receiveDate: '2024-04-30',
-    avatar: 'https://picsum.photos/id/659/200/200',
-    feeStatus: 'paid',
-    trainingCount: 16,
+    entryDate: '2024-04-30',
+    avatar: '',
+    paid: true,
     raceCount: 3
   },
   {
@@ -195,10 +186,9 @@ export const mockPigeons: Pigeon[] = [
     loftArea: 'A区-2号棚',
     status: 'racing',
     statusText: '比赛中',
-    receiveDate: '2024-05-15',
-    avatar: 'https://picsum.photos/id/1025/200/200',
-    feeStatus: 'paid',
-    trainingCount: 14,
+    entryDate: '2024-05-15',
+    avatar: '',
+    paid: true,
     raceCount: 3
   }
 ];
@@ -211,7 +201,8 @@ export const mockLoftAreas: LoftArea[] = [
     used: 85,
     area: '东区',
     manager: '李师傅',
-    status: 'normal'
+    status: 'normal',
+    statusText: '正常'
   },
   {
     id: 'A2',
@@ -220,7 +211,8 @@ export const mockLoftAreas: LoftArea[] = [
     used: 92,
     area: '东区',
     manager: '王师傅',
-    status: 'normal'
+    status: 'normal',
+    statusText: '正常'
   },
   {
     id: 'A3',
@@ -229,7 +221,8 @@ export const mockLoftAreas: LoftArea[] = [
     used: 100,
     area: '东区',
     manager: '张师傅',
-    status: 'full'
+    status: 'full',
+    statusText: '已满'
   },
   {
     id: 'B1',
@@ -238,7 +231,8 @@ export const mockLoftAreas: LoftArea[] = [
     used: 68,
     area: '西区',
     manager: '赵师傅',
-    status: 'normal'
+    status: 'normal',
+    statusText: '正常'
   },
   {
     id: 'B2',
@@ -247,7 +241,8 @@ export const mockLoftAreas: LoftArea[] = [
     used: 45,
     area: '西区',
     manager: '孙师傅',
-    status: 'normal'
+    status: 'normal',
+    statusText: '正常'
   },
   {
     id: 'C1',
@@ -256,7 +251,8 @@ export const mockLoftAreas: LoftArea[] = [
     used: 0,
     area: '南区',
     manager: '周师傅',
-    status: 'maintenance'
+    status: 'maintenance',
+    statusText: '维护中'
   },
   {
     id: 'C2',
@@ -265,6 +261,7 @@ export const mockLoftAreas: LoftArea[] = [
     used: 52,
     area: '南区',
     manager: '吴师傅',
-    status: 'normal'
+    status: 'normal',
+    statusText: '正常'
   }
 ];

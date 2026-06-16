@@ -21,11 +21,15 @@ export const calcSpeed = (distance: number, durationMinutes: number): number => 
 
 export const getStatusColor = (status: string): string => {
   const colorMap: Record<string, string> = {
+    health: '#43A047',
     healthy: '#43A047',
+    success: '#43A047',
     training: '#1E88E5',
     racing: '#FF7D00',
+    warning: '#FF9800',
     returned: '#00B42A',
     lost: '#E53935',
+    danger: '#E53935',
     completed: '#43A047',
     ongoing: '#1E88E5',
     upcoming: '#FF9800',
@@ -41,11 +45,15 @@ export const getStatusColor = (status: string): string => {
 
 export const getStatusBgColor = (status: string): string => {
   const colorMap: Record<string, string> = {
+    health: '#E8F5E9',
     healthy: '#E8F5E9',
+    success: '#E8F5E9',
     training: '#E3F2FD',
     racing: '#FFF3E0',
+    warning: '#FFF3E0',
     returned: '#E8F5E9',
     lost: '#FFEBEE',
+    danger: '#FFEBEE',
     completed: '#E8F5E9',
     ongoing: '#E3F2FD',
     upcoming: '#FFF3E0',

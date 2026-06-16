@@ -245,3 +245,146 @@
     background-color: $color-warning;
   }
 }
+
+.rankNum {
+  &.top1 {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+  }
+
+  &.top2 {
+    background: linear-gradient(135deg, #C0C0C0 0%, #A0A0A0 100%);
+  }
+
+  &.top3 {
+    background: linear-gradient(135deg, #CD7F32 0%, #8B4513 100%);
+  }
+}
+
+.prizeHeaderInner {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.prizeStats {
+  display: flex;
+  gap: $spacing-xl;
+}
+
+.prizeStat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rpx;
+}
+
+.prizeStatNum {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+}
+
+.prizeStatLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.resultCard {
+  background-color: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+}
+
+.resultRow {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  padding: $spacing-sm 0;
+  border-bottom: 2rpx solid $color-divider;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.resultRank {
+  width: 120rpx;
+  flex-shrink: 0;
+}
+
+.resultRankNum {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-primary;
+}
+
+.resultInfo {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.resultRing {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+}
+
+.resultOwner {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.resultSpeed {
+  width: 140rpx;
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.resultSpeedVal {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-primary;
+}
+
+.resultPrize {
+  width: 140rpx;
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.resultPrizeVal {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  color: $color-warning;
+}
+
+.typeInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.typePigeon {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.recordDate {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.emptyBox {
+  padding: $spacing-xxl 0;
+  text-align: center;
+}
+
+.emptyText {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}

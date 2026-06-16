@@ -1,21 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { View, Text, ScrollView } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import StatCard from '@/components/StatCard';
 import SectionHeader from '@/components/SectionHeader';
 import RaceCard from '@/components/RaceCard';
-import { mockPigeons, mockLoftAreas } from '@/data/mockPigeons';
-import { mockRaces, mockAnnouncements } from '@/data/mockRaces';
+import { useAppStore } from '@/store';
+import { mockAnnouncements } from '@/data/mockRaces';
 import styles from './index.module.scss';
 
 const HomePage: React.FC = () => {
   const [loading, setLoading] = useState(false);
+  const { pigeons, loftAreas, races, hydrate } = useAppStore();
 
-  const totalPigeons = mockPigeons.length;
-  const totalLoftCapacity = mockLoftAreas.reduce((sum, loft) => sum + loft.capacity, 0);
-  const totalLoftUsed = mockLoftAreas.reduce((sum, loft) => sum + loft.used, 0);
-  const activeRaces = mockRaces.filter(r => r.status !== 'completed').length;
-  const totalPrizePool = mockRaces.reduce((sum, r) => sum + r.prizePool, 0);
+  const totalPigeons = useMemo(() => pigeons.length, [pigeons]);
+  const totalLoftCapacity = useMemo(
+    () => loftAreas.reduce((sum, loft) => sum + loft.capacity, 0),
+    [loftAreas]
+  );
+  const totalLoftUsed = useMemo(
+    () => loftAreas.reduce((sum, loft) => sum + loft.used, 0),
+    [loftAreas]
+  );
+  const activeRaces = useMemo(
+    () => races.filter((r) => r.status !== 'completed').length,
+    [races]
+  );
+  const totalPrizePool = useMemo(
+    () => races.reduce((sum, r) => sum + r.prizePool, 0) + pigeons.filter(p => p.paid).length * 2000,
+    [races, pigeons]
+  );
 
   const quickActions = [
     { icon: '🏠', text: '鸽舍管理', color: '#1E88E5', bg: '#E3F2FD', path: '/pages/loft/index', isTab: true },
@@ -25,7 +38,6 @@ const HomePage: React.FC = () => {
   ];
 
   const handleQuickAction = (path: string, isTab: boolean) => {
-    console.log('[Home] Quick action clicked:', path, 'isTab:', isTab);
     if (isTab) {
       Taro.switchTab({ url: path });
     } else {
@@ -35,12 +47,11 @@ const HomePage: React.FC = () => {
 
   const handleRefresh = () => {
     setLoading(true);
-    console.log('[Home] Refreshing data...');
+    hydrate();
     setTimeout(() => {
       setLoading(false);
-      Taro.stopPullDownRefresh();
       Taro.showToast({ title: '刷新成功', icon: 'success' });
-    }, 1000);
+    }, 600);
   };
 
   return (
@@ -83,13 +94,13 @@ const HomePage: React.FC = () => {
         </View>
         <View className={styles.statRow} style={{ marginTop: 24 }}>
           <StatCard label="进行中比赛" value={activeRaces} unit="场" color="#FF9800" bgColor="#FFF3E0" />
-          <StatCard label="总奖金池" value={`¥${(totalPrizePool / 10000).toFixed(0)}万`} color="#E53935" bgColor="#FFEBEE" />
+          <StatCard label="总奖金池" value={`¥${(totalPrizePool / 10000).toFixed(1)}万`} color="#E53935" bgColor="#FFEBEE" />
         </View>
       </View>
 
       <View>
         <SectionHeader title="近期比赛" extra="查看全部" onExtraClick={() => Taro.switchTab({ url: '/pages/race/index' })} />
-        {mockRaces.slice(0, 3).map(race => (
+        {races.slice(0, 3).map((race) => (
           <RaceCard key={race.id} race={race} />
         ))}
       </View>
@@ -97,7 +108,7 @@ const HomePage: React.FC = () => {
       <View>
         <SectionHeader title="最新公告" />
         <View className={styles.announcementCard}>
-          {mockAnnouncements.map(item => (
+          {mockAnnouncements.map((item) => (
             <View key={item.id} className={styles.announcementItem}>
               <Text className={styles.announcementTitle}>{item.title}</Text>
               <View className={styles.announcementMeta}>

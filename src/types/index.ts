@@ -10,12 +10,12 @@ export interface Pigeon {
   birthDate: string;
   color: string;
   loftArea: string;
-  status: 'healthy' | 'training' | 'racing' | 'lost' | 'returned';
+  status: 'health' | 'healthy' | 'training' | 'racing' | 'lost' | 'returned';
   statusText: string;
-  receiveDate: string;
+  receiveDate?: string;
+  entryDate?: string;
   avatar: string;
-  feeStatus: 'paid' | 'unpaid';
-  trainingCount: number;
+  paid: boolean;
   raceCount: number;
 }
 

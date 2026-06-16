@@ -26,6 +26,21 @@
   background-color: $color-bg-hover;
 }
 
+.avatarPlaceholder {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: $radius-md;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatarIcon {
+  font-size: 72rpx;
+  line-height: 1;
+}
+
 .right {
   flex: 1;
   display: flex;

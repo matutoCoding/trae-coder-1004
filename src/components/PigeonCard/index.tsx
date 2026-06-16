@@ -24,12 +24,9 @@ const PigeonCard: React.FC<PigeonCardProps> = ({ pigeon, onClick }) => {
   return (
     <View className={styles.card} onClick={handleClick}>
       <View className={styles.left}>
-        <Image
-          className={styles.avatar}
-          src={pigeon.avatar}
-          mode="aspectFill"
-          onError={(e) => console.error('[PigeonCard] Image load error', e)}
-        />
+        <View className={styles.avatarPlaceholder}>
+          <Text className={styles.avatarIcon}>🕊</Text>
+        </View>
       </View>
       <View className={styles.right}>
         <View className={styles.row}>
@@ -40,20 +37,22 @@ const PigeonCard: React.FC<PigeonCardProps> = ({ pigeon, onClick }) => {
           <Text className={styles.info}>足环：{pigeon.ringNumber}</Text>
         </View>
         <View className={styles.infoRow}>
+          <Text className={styles.info}>电子环：{pigeon.electronicRing}</Text>
+        </View>
+        <View className={styles.infoRow}>
           <Text className={styles.info}>鸽主：{pigeon.ownerName}</Text>
-          <Text className={styles.info}>品种：{pigeon.breed}</Text>
+          <Text className={styles.info}>棚位：{pigeon.loftArea}</Text>
         </View>
         <View className={styles.statsRow}>
           <View className={styles.stat}>
-            <Text className={styles.statNum}>{pigeon.trainingCount}</Text>
-            <Text className={styles.statLabel}>训练</Text>
-          </View>
-          <View className={styles.stat}>
-            <Text className={styles.statNum}>{pigeon.raceCount}</Text>
+            <Text className={styles.statNum}>{pigeon.raceCount || 0}</Text>
             <Text className={styles.statLabel}>比赛</Text>
           </View>
           <View className={styles.stat}>
-            <StatusTag status={pigeon.feeStatus} text={pigeon.feeStatus === 'paid' ? '已缴费' : '未缴费'} />
+            <StatusTag
+              status={pigeon.paid ? 'success' : 'warning'}
+              text={pigeon.paid ? '已缴费' : '未缴费'}
+            />
           </View>
         </View>
       </View>
