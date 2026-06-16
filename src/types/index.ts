@@ -82,6 +82,7 @@ export interface SettlementItem {
   pigeonName: string;
   ownerName: string;
   status: 'completed' | 'pending';
+  raceId?: string;
 }
 
 export interface OwnerInfo {

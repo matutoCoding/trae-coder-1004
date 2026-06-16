@@ -145,24 +145,32 @@ const RaceDetailPage: React.FC = () => {
         </View>
       </View>
 
-      {unreturnedPigeons.length > 0 && (
+      {(race.totalPigeons - race.returnedCount) > 0 && (
         <View style={{ marginBottom: 24 }}>
           <Text className={styles.sectionTitle}>
-            未归巢名单（{unreturnedPigeons.length}羽）
+            未归巢名单（{race.totalPigeons - race.returnedCount}羽）
           </Text>
-          <View className={styles.unreturnedList}>
-            {unreturnedPigeons.map((p) => (
-              <View key={p.id} className={styles.unreturnedRow}>
-                <View style={{ flex: 1 }}>
-                  <Text className={styles.unreturnedRing}>{p.ringNumber}</Text>
-                  <Text className={styles.unreturnedOwner}>
-                    {p.ownerName} · {p.loftArea}
-                  </Text>
+          {unreturnedPigeons.length > 0 ? (
+            <View className={styles.unreturnedList}>
+              {unreturnedPigeons.map((p) => (
+                <View key={p.id} className={styles.unreturnedRow}>
+                  <View style={{ flex: 1 }}>
+                    <Text className={styles.unreturnedRing}>{p.ringNumber}</Text>
+                    <Text className={styles.unreturnedOwner}>
+                      {p.ownerName} · {p.loftArea}
+                    </Text>
+                  </View>
+                  <StatusTag status="lost" text="未归巢" />
                 </View>
-                <StatusTag status="lost" text="未归巢" />
-              </View>
-            ))}
-          </View>
+              ))}
+            </View>
+          ) : (
+            <View className={styles.emptyBox}>
+              <Text className={styles.emptyText}>
+                共有 {race.totalPigeons - race.returnedCount} 羽未归巢，明细信息待录入
+              </Text>
+            </View>
+          )}
         </View>
       )}
 

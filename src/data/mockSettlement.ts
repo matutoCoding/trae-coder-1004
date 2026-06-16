@@ -9,7 +9,8 @@ export const mockSettlements: SettlementItem[] = [
     date: '2024-11-08',
     pigeonName: '闪电侠',
     ownerName: '赵六',
-    status: 'completed'
+    status: 'completed',
+    raceId: 'R003'
   },
   {
     id: 'S002',
@@ -19,7 +20,8 @@ export const mockSettlements: SettlementItem[] = [
     date: '2024-11-08',
     pigeonName: '鹏程万里',
     ownerName: '吴九',
-    status: 'completed'
+    status: 'completed',
+    raceId: 'R003'
   },
   {
     id: 'S003',
@@ -29,7 +31,8 @@ export const mockSettlements: SettlementItem[] = [
     date: '2024-10-28',
     pigeonName: '王者归来',
     ownerName: '李四',
-    status: 'completed'
+    status: 'completed',
+    raceId: 'R002'
   },
   {
     id: 'S004',
@@ -59,7 +62,8 @@ export const mockSettlements: SettlementItem[] = [
     date: '2024-10-18',
     pigeonName: '疾风号',
     ownerName: '李四',
-    status: 'completed'
+    status: 'completed',
+    raceId: 'R001'
   },
   {
     id: 'S007',
@@ -69,7 +73,8 @@ export const mockSettlements: SettlementItem[] = [
     date: '2024-11-10',
     pigeonName: '王者归来',
     ownerName: '李四',
-    status: 'pending'
+    status: 'pending',
+    raceId: 'R003'
   }
 ];
 
@@ -80,5 +85,5 @@ export const mockOwnerInfo: OwnerInfo = {
   totalPigeons: 2,
   totalRaces: 4,
   totalPrize: 11000,
-  avatar: 'https://picsum.photos/id/64/200/200'
+  avatar: ''
 };

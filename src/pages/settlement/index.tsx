@@ -38,21 +38,27 @@ const SettlementPage: React.FC = () => {
   const [selectedRaceId, setSelectedRaceId] = useState('');
 
   const paidCount = useMemo(() => pigeons.filter((p) => p.paid).length, [pigeons]);
-
-  const totalEntryFee = useMemo(
+  const entryFeeRecords = useMemo(
+    () => settlements.filter((s) => s.type === 'entryFee'),
+    [settlements]
+  );
+  const entryFeeCompletedCount = useMemo(
+    () => entryFeeRecords.filter((s) => s.status === 'completed').length,
+    [entryFeeRecords]
+  );
+  const entryFeeTotal = useMemo(
     () => paidCount * FEE_PER_PIGEON,
     [paidCount]
   );
-
-  const totalEntryFeeFromRecords = useMemo(
+  const entryFeeArrived = useMemo(
     () =>
-      settlements
-        .filter((s) => s.type === 'entryFee' && s.status === 'completed')
+      entryFeeRecords
+        .filter((s) => s.status === 'completed')
         .reduce((sum, s) => sum + Math.abs(s.amount), 0),
-    [settlements]
+    [entryFeeRecords]
   );
 
-  const totalPrizePaid = useMemo(
+  const allPrizePaid = useMemo(
     () =>
       settlements
         .filter((s) => s.type !== 'entryFee' && s.status === 'completed')
@@ -60,7 +66,7 @@ const SettlementPage: React.FC = () => {
     [settlements]
   );
 
-  const netAmount = totalEntryFee - totalPrizePaid;
+  const netAmount = entryFeeTotal - allPrizePaid;
 
   const selectedRace = useMemo(
     () => races.find((r) => r.id === selectedRaceId),
@@ -75,23 +81,43 @@ const SettlementPage: React.FC = () => {
       .map((r) => ({ ...r, prize: getPrizeForRank(r.rank) }));
   }, [raceResults, selectedRaceId]);
 
-  const raceTotalPrize = useMemo(
+  const raceShouldPayTotal = useMemo(
     () => racePrizeResults.reduce((sum, r) => sum + r.prize, 0),
     [racePrizeResults]
   );
 
+  const raceRecords = useMemo(
+    () =>
+      settlements.filter(
+        (s) => s.type !== 'entryFee' && s.raceId === selectedRaceId
+      ),
+    [settlements, selectedRaceId]
+  );
   const racePrizePaid = useMemo(
     () =>
-      settlements
-        .filter((s) => s.type !== 'entryFee' && s.status === 'completed')
+      raceRecords
+        .filter((s) => s.status === 'completed')
         .reduce((sum, s) => sum + Math.abs(s.amount), 0),
-    [settlements]
+    [raceRecords]
+  );
+  const racePrizePending = useMemo(
+    () => Math.max(0, raceShouldPayTotal - racePrizePaid),
+    [raceShouldPayTotal, racePrizePaid]
   );
 
-  const racePrizePending = useMemo(
-    () => Math.max(0, raceTotalPrize - racePrizePaid),
-    [raceTotalPrize, racePrizePaid]
-  );
+  const filteredRecords = useMemo(() => {
+    if (selectedRaceId) {
+      return [
+        ...settlements.filter(
+          (s) => s.type === 'entryFee'
+        ),
+        ...settlements.filter(
+          (s) => s.type !== 'entryFee' && s.raceId === selectedRaceId
+        )
+      ].sort((a, b) => (a.date < b.date ? 1 : -1));
+    }
+    return settlements.slice().sort((a, b) => (a.date < b.date ? 1 : -1));
+  }, [settlements, selectedRaceId]);
 
   return (
     <ScrollView scrollY className={styles.page}>
@@ -102,16 +128,16 @@ const SettlementPage: React.FC = () => {
         </View>
         <View className={styles.summarySub}>
           <View className={styles.subItem}>
-            <Text className={styles.subValue}>{formatMoney(totalEntryFee)}</Text>
-            <Text className={styles.subLabel}>参赛费收入({paidCount}羽)</Text>
+            <Text className={styles.subValue}>{formatMoney(entryFeeTotal)}</Text>
+            <Text className={styles.subLabel}>参赛费收入 ({paidCount}羽)</Text>
           </View>
           <View className={styles.subItem}>
-            <Text className={styles.subValue}>{formatMoney(totalPrizePaid)}</Text>
+            <Text className={styles.subValue}>{formatMoney(entryFeeArrived)}</Text>
+            <Text className={styles.subLabel}>已到账 ({entryFeeCompletedCount}笔)</Text>
+          </View>
+          <View className={styles.subItem}>
+            <Text className={styles.subValue}>{formatMoney(allPrizePaid)}</Text>
             <Text className={styles.subLabel}>奖金支出</Text>
-          </View>
-          <View className={styles.subItem}>
-            <Text className={styles.subValue}>{formatMoney(totalEntryFeeFromRecords)}</Text>
-            <Text className={styles.subLabel}>已到账</Text>
           </View>
         </View>
       </View>
@@ -253,14 +279,14 @@ const SettlementPage: React.FC = () => {
               <View className={styles.settleSummary}>
                 <View className={styles.settleRow}>
                   <Text className={styles.settleLabel}>应发奖金合计</Text>
-                  <Text className={styles.settleValueWarn}>{formatMoney(raceTotalPrize)}</Text>
+                  <Text className={styles.settleValueWarn}>{formatMoney(raceShouldPayTotal)}</Text>
                 </View>
                 <View className={styles.settleRow}>
-                  <Text className={styles.settleLabel}>已发放</Text>
+                  <Text className={styles.settleLabel}>已发放（本场）</Text>
                   <Text className={styles.settleValueGreen}>{formatMoney(racePrizePaid)}</Text>
                 </View>
                 <View className={styles.settleRow}>
-                  <Text className={styles.settleLabel}>待发放</Text>
+                  <Text className={styles.settleLabel}>待发放（本场）</Text>
                   <Text className={styles.settleValueOrange}>{formatMoney(racePrizePending)}</Text>
                 </View>
               </View>
@@ -277,13 +303,13 @@ const SettlementPage: React.FC = () => {
 
       {activeTab === 'record' && (
         <>
-          <SectionHeader title={`收支记录 (${settlements.length}条)`} />
-          {settlements.length === 0 && (
+          <SectionHeader title={`收支记录 (${filteredRecords.length}条)`} />
+          {filteredRecords.length === 0 && (
             <View className={styles.emptyBox}>
               <Text className={styles.emptyText}>暂无收支记录</Text>
             </View>
           )}
-          {settlements.map((item) => {
+          {filteredRecords.map((item) => {
             const isIncome = item.type === 'entryFee';
             const absAmount = Math.abs(item.amount);
             return (

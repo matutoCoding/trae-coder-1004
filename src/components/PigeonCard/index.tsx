@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image } from '@tarojs/components';
+import { View, Text } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import type { Pigeon } from '@/types';
 import StatusTag from '@/components/StatusTag';
